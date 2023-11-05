@@ -19,11 +19,16 @@ class Menu extends Phaser.Scene {
           },
           fixedWidth: 0
         }
-        this.add.image(40, 40, 'start_button')
+        this.start = this.add.image(40, 40, 'start_button')        
+        this.start_sfx = this.load.audio('start_sfx', '219476__jarredgibb__button-05.wav'); 
+        this.start.setInteractive();
 
     }
         update() {
-          this.scene.start('playScene');    
+          this.start.on('pointerdown', () => { 
+            this.start_sfx.play();
+            this.scene.start('playScene');
+          });   
         }
     }
     

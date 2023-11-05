@@ -5,8 +5,8 @@ class Play extends Phaser.Scene {
 
     preload() {
         this.load.path = './assets/'
-        //this.load.atlas('ship', './blinking_ship2/blinking_ship2.png', './blinking_ship2/blinking_ship2_atlas.json');
-        this.load.image('ship', 'spaceship2Flip3.png')
+        this.load.atlas('ship', 'blinking_ship2/blinking_ship2.png', 'blinking_ship2/blinking_ship2_atlas.json');
+        //this.load.image('ship', 'spaceship2Flip3.png')
         this.load.image('bg', 'sky.png')
         this.load.image('Space Kitty', 'Space Kitty.png')
         this.load.image('asteroid', 'asteroid.png')
@@ -15,7 +15,6 @@ class Play extends Phaser.Scene {
         this.coin_sfx = this.load.audio('coin', '402766__matrixxx__retro-coin-04.wav');
         this.hit_sfx = this.load.audio('hit', '527529__jerimee__startled-fall.wav');
         this.jump_sfx = this.load.audio('jump', '503461__matrixxx__retro-jump-04.wav');
-        this.start_sfx = this.load.audio('start_sfx', '219476__jarredgibb__button-05.wav'); 
         this.scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -34,13 +33,12 @@ class Play extends Phaser.Scene {
         this.back = this.add.tileSprite(0, 0, 960, 540, 'bg').setOrigin(0, 0)
         this.back.fixedToCamera = true;
         this.player = this.physics.add.sprite(90, 500, 'ship')
-        /* this.player.anims.create({
+        this.player.anims.create({
             key: 'blink',
             frames: this.anims.generateFrameNames('ship', { prefix: 'ship_', start: 1, end: 2 }),
             frameRate: 2,
             repeat: -1
         });
-        */
         this.player.play('blink');
         this.coin = this.add.image(970, 600, 'coin')
         this.enemy = this.add.image(500, 450, 'Space Kitty')
@@ -59,6 +57,7 @@ class Play extends Phaser.Scene {
         this.score++;
         this.scoreText = this.add.text(10, 10, "SCORE: " + this.score, this.scoreConfig);
         if (Phaser.Input.Keyboard.JustDown(this.jump_key) && !this.is_jumping) {
+            this.jump_sfx.play();
             this.is_jumping = true;
             this.player.setVelocityY(-1000);
             this.clock = this.time.delayedCall(200, () => {
