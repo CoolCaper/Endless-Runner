@@ -40,9 +40,9 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
         this.player.play('blink');
-        this.coin = this.add.image(970, 600, 'coin')
-        this.enemy = this.add.image(500, 450, 'Space Kitty')
-        this.obst = this.add.image(990, 600, 'asteroid')
+        this.coin = this.physics.add.sprite(970, 600, 'coin')
+        this.enemy = this.physics.add.sprite(500, 450, 'Space Kitty')
+        this.obst = this.physics.add.sprite(990, 600, 'asteroid')
         this.score = 0;        
         this.jump_key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.is_jumping = false;        
@@ -53,9 +53,7 @@ class Play extends Phaser.Scene {
     }
 
     update() { 
-        this.back.tilePositionX += 10;
-        this.score++;
-        this.scoreText = this.add.text(10, 10, "SCORE: " + this.score, this.scoreConfig);
+        //jump command
         if (Phaser.Input.Keyboard.JustDown(this.jump_key) && !this.is_jumping) {
             this.jump_sfx.play();
             this.is_jumping = true;
@@ -67,24 +65,41 @@ class Play extends Phaser.Scene {
                 }, null, this);
             }, null, this);
         }
-        
+        //variables
+        this.back.tilePositionX += 10;
+        this.score++;
+        this.scoreText = this.add.text(10, 10, "SCORE: " + this.score, this.scoreConfig);        
         SK_active = false;
         asteroid_active = false;
         coin_active = false;
+        //obstacle randomizer
         if (this.score < 10000) {
             picker = Phaser.Math.Betwee(1, 20)
             if (10 < picker < 15) {
                 SK_active = true;
             } 
-            if (8 <= picker <= 13) {
+            if (9 <= picker <= 14) {
                 coin_active = true;
                 this.coin.y = Phaser.Math.Between(500, 550)
-            }
-            
+            }            
             if (15 <= picker <= 20) {
                 asteroid_active = true;
             }
-        }
+        } else {            
+            picker = Phaser.Math.Betwee(1, 10)
+            if (5 <= picker < 10) {
+                SK_active = true;
+            } 
+            if (3 < picker <= 5) {
+                coin_active = true;
+                this.coin.y = Phaser.Math.Between(500, 550)
+            }            
+            if (1 <= picker <= 3) {
+                asteroid_active = true;
+            }
+
+        }        
+        //randomly spawns space kitty obstacle
         if (SK_active) {
             this.enemy.x -= 4;
         }
@@ -93,7 +108,7 @@ class Play extends Phaser.Scene {
             this.enemy.x = 500;
         }
 
-        
+        //randomly spawns asteroid obstacle
         if (asteroid_active) {
             this.obst.x -= 4;
         }
@@ -101,7 +116,8 @@ class Play extends Phaser.Scene {
             asteroid_active = false;
             this.obst.x = 500;
         }
-
+        
+        //randomly spawns coin
         if (coin_active) {
             this.coin.x -=4;
         }
