@@ -5,8 +5,7 @@ class Menu extends Phaser.Scene {
     preload() {
         // load audio
         this.load.image('start_button', './assets/StartButton.png')
-        this.start_sfx = this.load.audio('start_sfx', '219476__jarredgibb__button-05.wav');  
-        
+        this.start_sfx = this.load.audio('start_sfx', '219476__jarredgibb__button-05.wav');          
         this.start = this.add.image(40, 40, 'start_button')  
         this.start.setInteractive();
         this.start.on('pointerdown', () => { 
