@@ -1,7 +1,7 @@
 {
     "frames": [
         {
-            "filename": "spaceship2flip3",
+            "filename": "ship_1",
             "frame": {
                 "w": 120,
                 "h": 120,
@@ -14,7 +14,7 @@
             }
         },
         {
-            "filename": "spaceship2flip4",
+            "filename": "ship_2",
             "frame": {
                 "w": 120,
                 "h": 120,
