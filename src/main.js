@@ -15,6 +15,7 @@ let config = {
         }
     }
 }
+let global_score = 0;
 let game = new Phaser.Game(config)
 
 let { width, height } = game.config

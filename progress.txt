@@ -5,7 +5,6 @@ Implement proper collision detection (via Arcade Physics or a custom routine) (1
 Use a minimum of four sound effects for key mechanics, UI, and/or significant events appropriate to your game design (1)
 Be playable for at least 15 seconds for a new player of low to moderate skill (1)
 UP NEXT
-Include one or more animated characters that use a texture atlas* (1)
 Use randomness to generate escalating challenge, e.g. terrain, pickups, etc. (1)
 DONE
 Have some form of player input/control appropriate to your game design (1) (CHECK)
@@ -14,6 +13,7 @@ Be theoretically endless (1) (CHECK)
 Include some metric of accomplishment that a player can improve over time, e.g., score, survival time, etc. (1) (CHECK)
 Have looping background music* (1)
 Use multiple Scene classes (dictated by your game's style) (1)
+Include one or more animated characters that use a texture atlas* (1)
 LAST
 Run without significant crashes or errors (1)
 Include in-game credits for all roles, assets, music, etc. (1)

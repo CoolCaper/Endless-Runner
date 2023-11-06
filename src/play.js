@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         this.load.path = './assets/'
-        this.load.atlas('ship', 'blinking_ship2/blinking_ship2.png', 'blinking_ship2/blinking_ship2_atlas.json');
+        this.load.atlas('ship', 'ship/ship.png', 'ship/ship_atlas.json');
         //this.load.image('ship', 'spaceship2Flip3.png')
         this.load.image('bg', 'sky.png')
         this.load.image('Space Kitty', 'Space Kitty.png')
@@ -30,6 +30,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {        
+        this.jump_add_sfx = this.sound.add('jump')
         this.back = this.add.tileSprite(0, 0, 960, 540, 'bg').setOrigin(0, 0)
         this.back.fixedToCamera = true;
         this.player = this.physics.add.sprite(90, 500, 'ship')
@@ -40,90 +41,132 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
         this.player.play('blink');
+        this.obst = this.physics.add.sprite(1050, 450, 'asteroid')
+        this.enemy = this.physics.add.sprite(1000, 450, 'Space Kitty')
         this.coin = this.physics.add.sprite(970, 600, 'coin')
-        this.enemy = this.physics.add.sprite(500, 450, 'Space Kitty')
-        this.obst = this.physics.add.sprite(990, 600, 'asteroid')
         this.score = 0;        
         this.jump_key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.is_jumping = false;        
         this.player.body.setCollideWorldBounds(true)        
         this.scoreText = this.add.text(10, 10, "SCORE: " + this.score, this.scoreConfig);
         this.bgm_music = this.sound.add('music');
+        this.coin_music = this.sound.add('coin');
         this.bgm_music.play();
+        this.coin_active = false;      
+        this.SK_active = false;
+        this.asteroid_active = false;
+        this.jump_num = 0
+        
+        this.hit = this.sound.add('hit')
+        this.physics.add.collider(this.player, this.obst, (player, obst) => {    
+          this.hit.play();
+          this.bgm_music.stop();     
+          global_score = this.score
+          this.scene.start('gameOverScene');
+
+        })
+        
+        this.physics.add.collider(this.player, this.enemy, (player, enemy) => {    
+            this.hit.play();
+            this.bgm_music.stop();     
+            global_score = this.score
+            this.scene.start('gameOverScene');  
+          })
+
+        
+          this.physics.add.collider(this.player, this.coin, (player, coin) => {    
+            this.coin_music.play();  
+            this.score += 1000;
+            this.coin_active = false;
+            this.coin.x = 990;
+          })
     }
 
     update() { 
         //jump command
-        if (Phaser.Input.Keyboard.JustDown(this.jump_key) && !this.is_jumping) {
-            this.jump_sfx.play();
+        //console.log(this.player.y)
+        //console.log(this.jump_num)
+            if (this.player.y == 480) {
+                this.jump_num = 0
+            }                  
+        if (Phaser.Input.Keyboard.JustDown(this.jump_key) && !this.is_jumping && this.jump_num < 1) {
+            this.jump_add_sfx.play();
             this.is_jumping = true;
-            this.player.setVelocityY(-1000);
+            this.jump_num++;
+            this.player.setVelocityY(-1500);
             this.clock = this.time.delayedCall(200, () => {
-                this.player.setVelocityY(1000);
+                this.player.setVelocityY(225);
                 this.clock = this.time.delayedCall(200, () => {
-                    this.is_jumping = false;                    
+                    this.is_jumping = false;
                 }, null, this);
             }, null, this);
         }
         //variables
         this.back.tilePositionX += 10;
         this.score++;
-        this.scoreText = this.add.text(10, 10, "SCORE: " + this.score, this.scoreConfig);        
-        SK_active = false;
-        asteroid_active = false;
-        coin_active = false;
+        this.scoreText = this.add.text(10, 10, "SCORE: " + this.score, this.scoreConfig);  
         //obstacle randomizer
-        if (this.score < 10000) {
-            picker = Phaser.Math.Betwee(1, 20)
-            if (10 < picker < 15) {
-                SK_active = true;
+        let picker;
+        let distance = Math.abs(this.obst.x - this.enemy.x)
+        if (this.score % 200 == 0) {
+            picker = Phaser.Math.Between(1, 20)
+            if (10 < picker && picker <= 15 && !this.SK_active) {
+                this.SK_active = true;
             } 
-            if (9 <= picker <= 14) {
-                coin_active = true;
-                this.coin.y = Phaser.Math.Between(500, 550)
+            if (picker > 10 && picker < 17 && !this.coin_active) {
+                this.coin_active = true;
+                console.log('This should not happen more then once per coin spawned')
+                this.coin.y = Phaser.Math.Between(320, 500)
             }            
-            if (15 <= picker <= 20) {
-                asteroid_active = true;
+            if (picker < 5 && !this.asteroid_active) {
+                console.log(picker)
+                console.log('asteroid active. picker should be less then five')
+                this.asteroid_active = true;
             }
-        } else {            
-            picker = Phaser.Math.Betwee(1, 10)
-            if (5 <= picker < 10) {
-                SK_active = true;
+            if (picker >= 17) {                
+                this.SK_active = true;
+                this.asteroid_active = true;
+            }
+        } 
+        /*
+        else if (this.score >= 5000 && this.score % 1000 == 0) {            
+            picker = Phaser.Math.Between(1, 10)
+            if (5 <= picker < 10 && !this.SK_active  && this.score % 250 == 0) {
+                this.SK_active = true;
             } 
-            if (3 < picker <= 5) {
-                coin_active = true;
-                this.coin.y = Phaser.Math.Between(500, 550)
+            if (3 < picker <= 5 && !this.coin_active  && this.score % 50 == 0) {
+                this.coin_active = true;
+                this.coin.y = 50//Phaser.Math.Between(0, 540)
             }            
-            if (1 <= picker <= 3) {
-                asteroid_active = true;
+            if (1 <= picker <= 3 && this.score % 500 == 0) {
+                this.asteroid_active = true;
             }
-
-        }        
+*/        
         //randomly spawns space kitty obstacle
-        if (SK_active) {
-            this.enemy.x -= 4;
+        if (this.SK_active) {
+            this.enemy.x -= 8;
         }
         if (this.enemy.x < 0) {
-            SK_active = false;
-            this.enemy.x = 500;
+            this.SK_active = false;
+            this.enemy.x = 1000;
         }
 
         //randomly spawns asteroid obstacle
-        if (asteroid_active) {
-            this.obst.x -= 4;
+        if (this.asteroid_active) {
+            this.obst.x -= 8;
         }
         if (this.obst.x < 0) {
-            asteroid_active = false;
-            this.obst.x = 500;
+            this.asteroid_active = false;
+            this.obst.x = 1050;
         }
         
         //randomly spawns coin
-        if (coin_active) {
-            this.coin.x -=4;
+        if (this.coin_active) {
+            this.coin.x -=8;
         }
         if (this.coin.x < 0) {
-            coin_active = false;
-            this.coin.x = 500;
+            this.coin_active = false;
+            this.coin.x = 990;
         }
     }
 }
