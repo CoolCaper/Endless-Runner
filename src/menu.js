@@ -23,7 +23,7 @@ class Menu extends Phaser.Scene {
         } 
         this.start_noise = this.sound.add('start_sfx')
         this.start_screen = this.add.tileSprite(0, 0, 960, 500, 'start_scr').setOrigin(0, 0)
-        this.start = this.add.image(100, 400, 'start_button')  
+        this.start = this.add.image(450, 400, 'start_button')  
         this.start.setInteractive();
         this.start.on('pointerdown', () => { 
           this.start_noise.play();
