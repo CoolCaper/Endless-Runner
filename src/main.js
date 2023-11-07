@@ -1,6 +1,7 @@
-// Endless Runner
+// Endless Runner - Space Rush
 // Name: Shauna
 // Date: 10/31/2023
+//creative tilt - outerspace
 'use strict'
 
 let config = {

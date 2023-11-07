@@ -160,7 +160,7 @@ class Play extends Phaser.Scene {
             } 
             if (picker > 5 && picker < 17 && !this.coin_active) {
                 this.coin_active = true;
-                this.coin_y = Phaser.Math.Between(200, 300)
+                this.coin_y = Phaser.Math.Between(100, 200)
             }            
             if (picker <= 5 && !this.asteroid_active) {
                 console.log(picker)
