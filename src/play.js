@@ -107,6 +107,11 @@ class Play extends Phaser.Scene {
             this.coin_active = false;
             this.coin.x = 990;
           })
+          
+            
+        this.instructions = this.add.text(200, 140, "Tap the up key to jump!", this.scoreConfig2); 
+        this.instructions2 = this.add.text(100, 190, "If you tap the up key again while\ndescending from your first jump", this.scoreConfig3);        
+        this.instructions3 = this.add.text(200, 260, "You will double jump!", this.scoreConfig2); 
 
     }
 
@@ -114,15 +119,13 @@ class Play extends Phaser.Scene {
         //jump command
         //console.log(this.player.y)
         //console.log(this.jump_num)
-        if (this.score < 100) {
-            
-        this.instructions = this.add.text(200, 200, "Tap the up key to jump!", this.scoreConfig2); 
-        this.instructions2 = this.add.text(100, 240, "If you tap the up key again while\ndescending from your first jump", this.scoreConfig3);        
-        this.instructions3 = this.add.text(200, 320, "You will double jump!", this.scoreConfig2); 
+        if (this.score == 150) {
+            this.instructions.setText('Dodge anything that comes at you\nbut collect the pink coins!')
+            this.instructions2.destroy()
+            this.instructions3.destroy()
         }
-        if (this.score >= 100) {
+        if (this.score == 300) {
             this.instructions.destroy()
-
         }
             if (this.player.y == 480) {
                 this.jump_num = 0
@@ -146,7 +149,10 @@ class Play extends Phaser.Scene {
         this.scoreText = this.add.text(10, 10, "SCORE: " + this.score, this.scoreConfig);  
         //obstacle randomizer
         let picker;
-        let distance = Math.abs(this.obst.x - this.enemy.x)
+        let distance = Math.abs(this.coin.x - this.enemy.x)
+        let distance2 = Math.abs(this.coin.x - this.obst.x) //I originally wanted to have it be so that coins could spawn ontop of enemies
+        //necessitating cleverly timed double jumps to obtain them. Unfortunately this created a strange glitch where if the coins and
+        //the obstacles were overlapping a certain way the ship would fly to the cieling and stay there
         if (this.score % 200 == 0 && this.score < 5000) {
             picker = Phaser.Math.Between(1, 20)
             if (10 < picker && picker <= 15 && !this.SK_active) {
@@ -154,7 +160,7 @@ class Play extends Phaser.Scene {
             } 
             if (picker > 5 && picker < 17 && !this.coin_active) {
                 this.coin_active = true;
-                this.coin_y = Phaser.Math.Between(300, 500)
+                this.coin_y = Phaser.Math.Between(200, 300)
             }            
             if (picker <= 5 && !this.asteroid_active) {
                 console.log(picker)
@@ -167,10 +173,10 @@ class Play extends Phaser.Scene {
             }
         } else if (this.score % 75 == 0 && this.score >= 5000) {            
             picker = Phaser.Math.Between(1, 20)
-            if (10 < picker && picker <= 15 && !this.SK_active) {
+            if (10 < picker && picker <= 20 && !this.SK_active) {
                 this.SK_active = true;
             } 
-            if (picker > 6 && picker <= 11 && !this.coin_active) {
+            if (picker >= 5 && picker <= 10 && !this.coin_active) {
                 this.coin_active = true;
                 this.coin_y = Phaser.Math.Between(300, 500)
             }            
