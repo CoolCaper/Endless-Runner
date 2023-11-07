@@ -2,6 +2,19 @@
 // Name: Shauna
 // Date: 10/31/2023
 //creative tilt - outerspace
+/*
+https://github.com/CoolCaper/Endless-Runner
+
+https://coolcaper.github.io/Endless-Runner/
+
+Creative Tilt:
+I went for an outerspace theme, and I'm most proud of my implementation of the jump code, which made use of both arcade physics and 
+delayedCall. And it was all my own!
+I also like the way my idea for randomizing terrain turned out :)
+
+So please look at that when grading :D
+
+*/
 'use strict'
 
 let config = {
