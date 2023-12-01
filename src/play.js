@@ -7,7 +7,7 @@ class Play extends Phaser.Scene {
         this.load.path = './assets/'
         this.load.atlas('ship', 'ship/ship.png', 'ship/ship_atlas.json');
         //this.load.image('ship', 'spaceship2Flip3.png')
-        this.load.image('bg', 'sky.png')
+        this.load.image('bg', 'sky2.png')
         this.load.image('Space Kitty', 'Space Kitty.png')
         this.load.image('asteroid', 'asteroid.png')
         this.load.image('coin', 'coin.png')
