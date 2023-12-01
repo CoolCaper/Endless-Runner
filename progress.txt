@@ -16,8 +16,7 @@ Properly transition between Scenes and allow the player to restart w/out having 
 Be playable for at least 15 seconds for a new player of low to moderate skill (1)
 Include in-game credits for all roles, assets, music, etc. (1)
 LAST
-Run without significant crashes or errors (1)
-
+Run without significant crashes or errors (1
 
 CREDITS 
 -Sprites by me
